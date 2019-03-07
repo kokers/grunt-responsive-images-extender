@@ -17,7 +17,7 @@ module.exports = function(grunt) {
   var fs = require('fs');
   var path = require('path');
   var cheerio = require('cheerio');
-  var sizeOf = require('image-size');
+  var probe = require('probe-image-size');
 
   var DEFAULT_OPTIONS = {
     separator: '-',
@@ -63,7 +63,8 @@ module.exports = function(grunt) {
           var srcMap = {};
 
           imageNames.forEach(function(imageName) {
-            srcMap[imageName] = sizeOf(path.join(imagePath.dir, imageName)).width;
+			var data = require('fs').readFileSync(path.join(imagePath.dir, imageName));
+			srcMap[imageName] = probe.sync(data).width;
           });
 
           return srcMap;
